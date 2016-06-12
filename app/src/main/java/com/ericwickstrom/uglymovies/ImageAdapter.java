@@ -58,6 +58,8 @@ public class ImageAdapter extends BaseAdapter {
                 .load(url)
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error)
+                .resize(560, 800)
+                .noFade()
                 .into(imageView);
 
         return imageView;
