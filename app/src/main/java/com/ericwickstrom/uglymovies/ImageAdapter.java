@@ -9,51 +9,35 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 /**
- * Created by beardsmcgee on 6/11/16.
+ * Adapter is used with a GridView and Picasso to display images pulled from imdb.org
  */
 public class ImageAdapter extends BaseAdapter {
-    private static String[] imageArray = {
-                "http://i.imgur.com/rFLNqWI.jpg",
-            "http://i.imgur.com/C9pBVt7.jpg",
-            "http://i.imgur.com/rT5vXE1.jpg",
-            "http://i.imgur.com/aIy5R2k.jpg",
-            "http://i.imgur.com/MoJs9pT.jpg",
-            "http://i.imgur.com/S963yEM.jpg",
-            "http://i.imgur.com/rLR2cyc.jpg",
-            "http://i.imgur.com/SEPdUIx.jpg",
-            "http://i.imgur.com/aC9OjaM.jpg",
-            "http://i.imgur.com/76Jfv9b.jpg",
-            "http://i.imgur.com/fUX7EIB.jpg",
-            "http://i.imgur.com/syELajx.jpg",
-            "http://i.imgur.com/COzBnru.jpg",
-            "http://i.imgur.com/Z3QjilA.jpg",
-    };
-
-    private Integer[] images = {
-            R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6
-    };
-
+    private final String BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
     private Context context;
+    private ArrayList<Movie> movies;
 
-    public ImageAdapter(Context c){
-        context = c;
+    public ImageAdapter(Context context, ArrayList<Movie> movies) {
+        this.context = context;
+        this.movies = movies;
     }
 
     @Override
     public int getCount() {
-        return images.length;
+        return movies.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return images[position];
+        return movies.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return movies.get(position).getId();
     }
 
     @Override
@@ -61,29 +45,21 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
         if(convertView == null){
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(480, 480));
+            imageView.setLayoutParams(new GridView.LayoutParams(560, 800));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            imageView.setPadding(0, 0, 0, 0);
         } else {
             imageView = (ImageView) convertView;
         }
 
+        String url = BASE_URL + movies.get(position).getPosterPath();
 
         Picasso.with(context)
-                .load(imageArray[position])
+                .load(url)
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error)
                 .into(imageView);
 
-
-        /*
-        ImageView imageView = new ImageView(context);
-        imageView.setImageResource(images[position]);
-        imageView.setLayoutParams(new GridView.LayoutParams(480, 480));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setPadding(8, 8, 8, 8);
-        return imageView;
-        */
         return imageView;
     }
 }
