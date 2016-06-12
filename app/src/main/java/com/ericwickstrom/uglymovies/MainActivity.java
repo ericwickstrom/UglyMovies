@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -74,17 +76,17 @@ public class MainActivity extends AppCompatActivity {
                 movie.setOverview(result.getString(OVERVIEW));
 
                 //parse Release Date from json in to Date object
-                //   String date = result.getString(RELEASE_DATE);
-                //  DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-                // movie.setReleaseDate(df.parse(date));
+                String date = result.getString(RELEASE_DATE);
+                DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+                movie.setReleaseDate(df.parse(date));
 
                 //create array for GenreIds from JSONArray
-                //    JSONArray genreIds = result.getJSONArray(GENRE_IDS);
-                //  int[] genres = new int[genreIds.length()];
-                //for(int j = 0; j < genreIds.length(); j++){
-                //      genres[j] = genreIds.getInt(j);
-                //  }
-                //movie.setGenreIds(genres);
+                JSONArray genreIds = result.getJSONArray(GENRE_IDS);
+                int[] genres = new int[genreIds.length()];
+                for (int j = 0; j < genreIds.length(); j++) {
+                    genres[j] = genreIds.getInt(j);
+                }
+                movie.setGenreIds(genres);
 
                 movie.setId(result.getLong(ID));
                 movie.setOriginalTitle(result.getString(ORIGINAL_TITLE));

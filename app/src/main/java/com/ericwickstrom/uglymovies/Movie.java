@@ -6,7 +6,6 @@ import java.util.Date;
  * Movie object structured as defined at imdb.org
  */
 public class Movie {
-    //replace string with boolean later
     private String posterPath;
     private boolean adult;
     private String overview;
