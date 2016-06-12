@@ -15,7 +15,6 @@ import java.util.ArrayList;
  * Adapter is used with a GridView and Picasso to display images pulled from imdb.org
  */
 public class ImageAdapter extends BaseAdapter {
-    private final String BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
     private Context context;
     private ArrayList<Movie> movies;
@@ -52,7 +51,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        String url = BASE_URL + movies.get(position).getPosterPath();
+        String url = Movie.BASE_URL_W185 + movies.get(position).getPosterPath();
 
         Picasso.with(context)
                 .load(url)

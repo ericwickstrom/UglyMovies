@@ -1,5 +1,11 @@
+//TODO: save state stuff for if user changes screen orientation
+//TODO: move static strings to Movie class (URLs too)
+//TODO: make activities less ugly
+//TODO: settings to display top rated or most popular searches
+
 package com.ericwickstrom.uglymovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,24 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private final String API_ID = "";
+    private final String API_KEY = "";
 
-    //JSON parser strings for movie database
-    private final String ADULT = "adult";
-    private final String POSTER_PATH = "poster_path";
-    private final String RESULTS = "results";
-    private final String OVERVIEW = "overview";
-    private final String RELEASE_DATE = "release_date";
-    private final String GENRE_IDS = "genre_ids";
-    private final String ID = "id";
-    private final String ORIGINAL_TITLE = "original_title";
-    private final String ORIGINAL_LANGUAGE = "original_language";
-    private final String TITLE = "title";
-    private final String BACKDROP_PATH = "backdrop_path";
-    private final String POPULARITY = "popularity";
-    private final String VOTE_COUNT = "vote_count";
-    private final String VIDEO = "video";
-    private final String VOTE_AVERAGE = "vote_average";
     GridView gridView;
     ImageAdapter imageAdapter;
     private ArrayList<Movie> movies = new ArrayList<>();
@@ -55,7 +44,13 @@ public class MainActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, ""+position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Movie movie = movies.get(position);
+                intent.putExtra(Movie.TITLE, movie.getTitle());
+                intent.putExtra(Movie.POSTER_PATH, movie.getPosterPath());
+                intent.putExtra(Movie.RELEASE_DATE, movie.getReleaseDate().toString());
+                intent.putExtra(Movie.OVERVIEW, movie.getOverview());
+                startActivity(intent);
             }
         });
 
@@ -67,36 +62,36 @@ public class MainActivity extends AppCompatActivity {
     private void populateMovies(String json) {
         try {
             JSONObject reader = new JSONObject(json);
-            JSONArray results = reader.getJSONArray(RESULTS);
+            JSONArray results = reader.getJSONArray(Movie.RESULTS);
             for (int i = 0; i < results.length(); i++) {
                 JSONObject result = results.getJSONObject(i);
                 Movie movie = new Movie();
-                movie.setPosterPath(result.getString(POSTER_PATH).substring(1));
-                movie.setAdult(result.getBoolean(ADULT));
-                movie.setOverview(result.getString(OVERVIEW));
+                movie.setPosterPath(result.getString(Movie.POSTER_PATH).substring(1));
+                movie.setAdult(result.getBoolean(Movie.ADULT));
+                movie.setOverview(result.getString(Movie.OVERVIEW));
 
                 //parse Release Date from json in to Date object
-                String date = result.getString(RELEASE_DATE);
+                String date = result.getString(Movie.RELEASE_DATE);
                 DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
                 movie.setReleaseDate(df.parse(date));
 
                 //create array for GenreIds from JSONArray
-                JSONArray genreIds = result.getJSONArray(GENRE_IDS);
+                JSONArray genreIds = result.getJSONArray(Movie.GENRE_IDS);
                 int[] genres = new int[genreIds.length()];
                 for (int j = 0; j < genreIds.length(); j++) {
                     genres[j] = genreIds.getInt(j);
                 }
                 movie.setGenreIds(genres);
 
-                movie.setId(result.getLong(ID));
-                movie.setOriginalTitle(result.getString(ORIGINAL_TITLE));
-                movie.setOriginalLanguage(result.getString(ORIGINAL_LANGUAGE));
-                movie.setTitle(result.getString(TITLE));
-                movie.setBackdropPath(result.getString(BACKDROP_PATH));
-                movie.setPopularity(result.getDouble(POPULARITY));
-                movie.setVoteCount(result.getLong(VOTE_COUNT));
-                movie.setVideo(result.getBoolean(VIDEO));
-                movie.setVoteAverage(result.getDouble(VOTE_AVERAGE));
+                movie.setId(result.getLong(Movie.ID));
+                movie.setOriginalTitle(result.getString(Movie.ORIGINAL_TITLE));
+                movie.setOriginalLanguage(result.getString(Movie.ORIGINAL_LANGUAGE));
+                movie.setTitle(result.getString(Movie.TITLE));
+                movie.setBackdropPath(result.getString(Movie.BACKDROP_PATH));
+                movie.setPopularity(result.getDouble(Movie.POPULARITY));
+                movie.setVoteCount(result.getLong(Movie.VOTE_COUNT));
+                movie.setVideo(result.getBoolean(Movie.VIDEO));
+                movie.setVoteAverage(result.getDouble(Movie.VOTE_AVERAGE));
 
                 movies.add(movie);
             }
@@ -115,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             HttpURLConnection urlConnection;
             BufferedReader reader;
             String movieJson;
-            String urlString = "http://api.themoviedb.org/3/movie/top_rated?api_key=b7449954824bae384ce3314f87fc872d";
+            String urlString = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + API_KEY;
 
             try {
                 URL url = new URL(urlString);
@@ -141,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
                 movieJson = buffer.toString();
                 populateMovies(movieJson);
-                Log.v("MOVIE", movieJson);
+
 
             } catch (Exception e) {
                 Log.e("ERROR", e.toString());

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ericwickstrom.uglymovies.DetailActivity">
+
+    <TextView
+        android:id="@+id/detail_title_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Movie Title" />
+
+    <ImageView
+        android:id="@+id/detail_poster_imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/detail_releaseYear_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1900" />
+
+    <TextView
+        android:id="@+id/detail_length_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/detail_releaseDate_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="01/01/1900" />
+
+    <TextView
+        android:id="@+id/detail_overView_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="asdfasdf asdfasdf asdfasdf dsfwe  wefwefwefwef wefwefwef wefwefwef asdafadsf" />
+
+</LinearLayout>
